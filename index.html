@@ -9,10 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
+<script>
+  // Auto-hide topbar when embedded inside Webflow iframe
+  if (window.self !== window.top) {
+    document.documentElement.style.setProperty('--topbar-display', 'none');
+  }
+</script>
 </head>
 <body>
 
-<!-- TOP BAR: window badge + phone only — no duplicate nav -->
+<!-- TOP BAR: hidden when embedded in Webflow, visible on GitHub direct -->
 <div class="tracker-topbar">
   <div class="topbar-inner">
     <div class="window-badge">
@@ -34,11 +40,8 @@
   </div>
 </div>
 
-<!-- MOBILE: map shown above panel on small screens -->
-<!-- DESKTOP: side-by-side map + panel -->
 <div class="tracker-layout">
 
-  <!-- MAP COL -->
   <div class="map-col">
     <div class="map-toolbar">
       <div class="filter-group">
@@ -61,14 +64,11 @@
       </div>
     </div>
     <div id="map"></div>
-    <!-- Mobile tap-to-search prompt shown below map -->
     <div class="mobile-map-hint">&#8593; Tap a pin for details &bull; Or search your address above</div>
   </div>
 
-  <!-- SIDE PANEL -->
   <div class="side-panel" id="side-panel">
 
-    <!-- DEFAULT STATE -->
     <div class="panel-state" id="panel-default">
       <div class="panel-icon">&#127777;</div>
       <h3>Explore Storm Events</h3>
@@ -77,7 +77,6 @@
       <div class="quick-stats" id="quick-stats"></div>
     </div>
 
-    <!-- HAIL EVENT DETAIL -->
     <div class="panel-state hidden" id="panel-hail">
       <div class="panel-back" onclick="showDefaultPanel()">&#8592; Back to map</div>
       <div class="event-header">
@@ -112,10 +111,9 @@
         <div class="ins-verdict" id="ins-verdict"></div>
         <div class="ins-detail" id="ins-detail"></div>
       </div>
-      <button class="panel-cta-btn" onclick="openBaileyPopup()">Book Inspection for This Area &rarr;</button>
+      <button class="panel-cta-btn" onclick="openInspectionForm()">Book Inspection for This Area &rarr;</button>
     </div>
 
-    <!-- WIND EVENT DETAIL -->
     <div class="panel-state hidden" id="panel-wind">
       <div class="panel-back" onclick="showDefaultPanel()">&#8592; Back to map</div>
       <div class="event-header">
@@ -129,10 +127,9 @@
         <div class="estat-box"><span class="estat-num" id="wind-homes"></span><span class="estat-label">Est. Homes</span></div>
       </div>
       <div class="wind-info-block" id="wind-info"></div>
-      <button class="panel-cta-btn" onclick="openBaileyPopup()">Book Inspection for This Area &rarr;</button>
+      <button class="panel-cta-btn" onclick="openInspectionForm()">Book Inspection for This Area &rarr;</button>
     </div>
 
-    <!-- ADDRESS RESULT -->
     <div class="panel-state hidden" id="panel-address">
       <div class="panel-back" onclick="showDefaultPanel()">&#8592; Back to map</div>
       <div class="addr-verdict-wrap">
@@ -145,14 +142,51 @@
         <div class="estat-box"><span class="estat-num" id="addr-largest"></span><span class="estat-label">Largest Hail</span></div>
       </div>
       <div class="events-feed" id="addr-events-feed"></div>
-      <button class="panel-cta-btn" id="addr-cta-btn" onclick="openBaileyPopup()">Book My Free Inspection &rarr;</button>
+      <button class="panel-cta-btn" id="addr-cta-btn" onclick="openInspectionForm()">Book My Free Inspection &rarr;</button>
       <p class="panel-cta-sub">No cost. No obligation. We document everything for your claim.</p>
     </div>
 
   </div>
 </div>
 
-<!-- INFO SECTIONS -->
+<!-- INSPECTION FORM MODAL (Formspree — same form as baileyroofingrestoration.com) -->
+<div id="inspection-modal" class="modal-overlay" onclick="closeFormIfOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeInspectionForm()">&#10005;</button>
+    <div class="modal-eyebrow">Free Roof Inspection</div>
+    <h2 class="modal-title">Book Your Free Inspection</h2>
+    <p class="modal-sub">No cost. No obligation. We'll contact you within 1 business day.</p>
+    <form id="inspection-form" action="https://formspree.io/f/mojzzlzd" method="POST">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-input" placeholder="John Smith" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone Number</label>
+        <input type="tel" name="phone" class="form-input" placeholder="(770) 555-0100" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Property Address</label>
+        <input type="text" name="address" id="form-address" class="form-input" placeholder="123 Oak St, Suwanee GA 30024" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email (optional)</label>
+        <input type="email" name="email" class="form-input" placeholder="you@email.com">
+      </div>
+      <input type="hidden" name="source" value="Storm Tracker">
+      <input type="hidden" name="storm_context" id="form-storm-context" value="">
+      <button type="submit" class="form-submit">Request My Free Inspection &rarr;</button>
+    </form>
+    <div id="form-success" class="form-success hidden">
+      <div class="success-icon">&#10003;</div>
+      <h3>Request Received!</h3>
+      <p>We will contact you within 1 business day to schedule your free inspection.</p>
+      <p style="margin-top:8px">Questions? Call <a href="tel:+17703818081" style="color:#C8A45A">(770) 381-8081</a></p>
+    </div>
+    <p class="modal-disclaimer">Bailey Roofing and Restoration &bull; BBB A+ &bull; Licensed &amp; Insured &bull; Buford, GA</p>
+  </div>
+</div>
+
 <div class="below-map">
   <div class="page-wrap">
     <div class="info-grid">
@@ -183,7 +217,7 @@
       <div class="faq-list">
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">What hail size damages a roof? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">We track hail from 0.75" (dime size) and above. Hail at 1.00" (quarter size) can crack shingle granules and shorten your roof's lifespan. Golf ball hail (1.75") almost always causes insurance-claimable damage. This tracker color-codes every event so you know exactly what hit near you.</div>
+          <div class="faq-a">We track hail from 0.75" (dime size) and above. Hail at 1.00" (quarter size) can crack shingle granules and shorten your roof's lifespan. Golf ball hail (1.75") almost always causes insurance-claimable damage.</div>
         </div>
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">What wind speed damages 3-tab shingles? <span class="chev">&#8964;</span></button>
@@ -191,7 +225,7 @@
         </div>
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">How does the 2-year insurance window work? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">Most Georgia homeowners insurance policies allow storm damage claims within 2 years of the loss event. This tracker uses a rolling window that updates every day — it always shows the 24 most recent months. Events older than 2 years are shown grayed out as informational history only.</div>
+          <div class="faq-a">Most Georgia homeowners insurance policies allow storm damage claims within 2 years of the loss event. This tracker uses a rolling window that updates every day — always showing the 24 most recent months. Events older than 2 years are shown grayed out as informational history only.</div>
         </div>
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">Does insurance cover hail and wind roof damage? <span class="chev">&#8964;</span></button>
@@ -210,13 +244,12 @@
   </div>
 </div>
 
-<!-- BOTTOM CTA -->
 <section class="bottom-cta">
   <div class="page-wrap" style="text-align:center">
     <h2>Your Roof May Already <span class="gold">Be Covered</span></h2>
     <p>If a qualifying storm hit your area in the past 2 years, your insurance company may owe you an inspection. Storm damage worsens over time — and claims have deadlines.</p>
     <div class="cta-group">
-      <button class="btn-gold" onclick="openBaileyPopup()">Book My Free Inspection</button>
+      <button class="btn-gold" onclick="openInspectionForm()">Book My Free Inspection</button>
       <a class="btn-outline" href="tel:+17703818081">(770) 381-8081</a>
     </div>
   </div>
