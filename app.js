@@ -516,17 +516,65 @@ function toggleFaq(btn) {
 }
 
 // ═══════════════════════════════════════════════════════
-// BAILEY POPUP
+// INSPECTION FORM — uses Formspree mojzzlzd
 // ═══════════════════════════════════════════════════════
-function openBaileyPopup() {
-  if (window.parent && window.parent.baileyPopup && window.parent.baileyPopup.open) {
-    window.parent.baileyPopup.open();
-  } else if (typeof baileyPopup !== 'undefined' && baileyPopup.open) {
-    baileyPopup.open();
-  } else {
-    window.open('https://calendly.com/brandin-baileyroofingrestoration/free-inspection', '_blank');
+function openInspectionForm(context) {
+  // If inside Webflow iframe, trigger baileyPopup instead
+  if (window.self !== window.top) {
+    try {
+      if (window.parent.baileyPopup && window.parent.baileyPopup.open) {
+        window.parent.baileyPopup.open();
+        return;
+      }
+    } catch(e) {}
+  }
+  // Otherwise open built-in modal
+  const modal = document.getElementById('inspection-modal');
+  if (modal) {
+    modal.classList.add('open');
+    if (context) document.getElementById('form-storm-context').value = context;
   }
 }
+
+function closeInspectionForm() {
+  document.getElementById('inspection-modal').classList.remove('open');
+}
+
+function closeFormIfOutside(e) {
+  if (e.target === document.getElementById('inspection-modal')) closeInspectionForm();
+}
+
+// Handle Formspree submission
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('inspection-form');
+  if (!form) return;
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = 'Sending\u2026';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('form-success').classList.remove('hidden');
+      } else {
+        btn.textContent = 'Try again';
+        btn.disabled = false;
+      }
+    } catch(err) {
+      btn.textContent = 'Try again';
+      btn.disabled = false;
+    }
+  });
+});
+
+// Replace old openBaileyPopup calls — alias for backwards compat
+function openBaileyPopup() { openInspectionForm(); }
 
 // ═══════════════════════════════════════════════════════
 // ENTER KEY
