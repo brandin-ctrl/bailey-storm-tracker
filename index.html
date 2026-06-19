@@ -17,14 +17,27 @@
 </head>
 <body>
 
-<!-- TOP BAR: auto-hidden when embedded in Webflow -->
+<!-- FULL HEADER: hidden in Webflow, visible on GitHub -->
 <div class="tracker-topbar">
-  <div class="topbar-inner">
-    <div class="window-badge">
-      <span class="pulse-dot"></span>
-      <span id="window-label">Loading&hellip;</span>
+  <div class="gh-nav">
+    <div class="gh-nav-inner">
+      <a href="https://baileyroofingrestoration.com" target="_blank">
+        <img src="https://cdn.prod.website-files.com/695c0abe8b8c2841c4ebcd56/696e4e9e0dbdf2cd591fd599_logo_nav.png" alt="Bailey Roofing and Restoration" class="gh-logo">
+      </a>
+      <div class="gh-nav-right">
+        <div class="window-badge">
+          <span class="pulse-dot"></span>
+          <span id="window-label">Loading&hellip;</span>
+        </div>
+        <a href="tel:+17703818081" class="header-phone">(770) 381-8081</a>
+        <a href="https://baileyroofingrestoration.com" target="_blank" class="gh-site-link">Visit Our Website &rarr;</a>
+      </div>
     </div>
-    <a href="tel:+17703818081" class="header-phone">(770) 381-8081</a>
+  </div>
+  <div class="gh-hero">
+    <p class="gh-eyebrow">North Georgia Storm Intelligence &mdash; NOAA Verified Data</p>
+    <h1 class="gh-title">Did a Storm Hit<br><span>Your Roof?</span></h1>
+    <p class="gh-sub">Search your address to see every qualifying hail and wind event within 1 mile of your home — and whether your roof may be covered by insurance.</p>
   </div>
 </div>
 
@@ -152,7 +165,6 @@
 <!-- INFO CARDS + FAQ + DISCLAIMER + BOTTOM CTA -->
 <div class="below-map">
   <div class="page-wrap">
-
     <div class="info-grid">
       <div class="info-card">
         <div class="info-icon">&#128737;</div>
@@ -205,11 +217,9 @@
     <div class="disclaimer">
       <strong>Storm Data Notice:</strong> This tracker displays verified NOAA storm event reports updated weekly. A storm event near your address does not guarantee your roof was damaged — actual damage depends on roof age, materials, and exact storm path. A licensed professional inspection is required to confirm damage and support an insurance claim. &bull; <strong>Bailey Roofing and Restoration</strong> &bull; 218 S Hill St, Buford GA 30518 &bull; (770) 381-8081 &bull; BBB A+ Accredited
     </div>
-
   </div>
 </div>
 
-<!-- BOTTOM CTA -->
 <section class="bottom-cta">
   <div class="page-wrap" style="text-align:center">
     <h2>Your Roof May Already <span class="gold">Be Covered</span></h2>
@@ -221,7 +231,7 @@
   </div>
 </section>
 
-<!-- HIDDEN INSPECTION MODAL — only shows on GitHub direct, not in Webflow -->
+<!-- INSPECTION MODAL — only fires on GitHub direct, Webflow uses baileyPopup -->
 <div id="inspection-modal" class="modal-overlay" onclick="closeFormIfOutside(event)">
   <div class="modal-box">
     <button class="modal-close" onclick="closeInspectionForm()">&#10005;</button>
