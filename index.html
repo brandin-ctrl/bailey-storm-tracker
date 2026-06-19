@@ -9,36 +9,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
-<script>
-  if (window.self !== window.top) {
-    document.documentElement.style.setProperty('--topbar-display', 'none');
-  }
-</script>
 </head>
 <body>
 
-<!-- FULL HEADER: hidden in Webflow, visible on GitHub -->
-<div class="tracker-topbar">
+<!-- NAV + HERO: hidden by JS when inside Webflow iframe -->
+<div id="gh-header">
+
   <div class="gh-nav">
     <div class="gh-nav-inner">
       <a href="https://baileyroofingrestoration.com" target="_blank">
         <img src="https://cdn.prod.website-files.com/695c0abe8b8c2841c4ebcd56/696e4e9e0dbdf2cd591fd599_logo_nav.png" alt="Bailey Roofing and Restoration" class="gh-logo">
       </a>
       <div class="gh-nav-right">
-        <div class="window-badge">
-          <span class="pulse-dot"></span>
-          <span id="window-label">Loading&hellip;</span>
-        </div>
         <a href="tel:+17703818081" class="header-phone">(770) 381-8081</a>
-        <a href="https://baileyroofingrestoration.com" target="_blank" class="gh-site-link">Visit Our Website &rarr;</a>
+        <a href="https://baileyroofingrestoration.com" target="_blank" class="gh-site-btn">Visit Our Website &rarr;</a>
       </div>
     </div>
   </div>
+
   <div class="gh-hero">
-    <p class="gh-eyebrow">North Georgia Storm Intelligence &mdash; NOAA Verified Data</p>
+    <p class="gh-eyebrow">North Georgia Storm Intelligence &mdash; NOAA Verified</p>
     <h1 class="gh-title">Did a Storm Hit<br><span>Your Roof?</span></h1>
     <p class="gh-sub">Search your address to see every qualifying hail and wind event within 1 mile of your home — and whether your roof may be covered by insurance.</p>
+    <div class="gh-window-badge">
+      <span class="pulse-dot"></span>
+      <span id="window-label">Loading coverage window&hellip;</span>
+    </div>
   </div>
+
 </div>
 
 <!-- SEARCH BAR -->
@@ -162,7 +160,7 @@
   </div>
 </div>
 
-<!-- INFO CARDS + FAQ + DISCLAIMER + BOTTOM CTA -->
+<!-- INFO + FAQ + DISCLAIMER -->
 <div class="below-map">
   <div class="page-wrap">
     <div class="info-grid">
@@ -220,6 +218,7 @@
   </div>
 </div>
 
+<!-- BOTTOM CTA -->
 <section class="bottom-cta">
   <div class="page-wrap" style="text-align:center">
     <h2>Your Roof May Already <span class="gold">Be Covered</span></h2>
@@ -231,7 +230,7 @@
   </div>
 </section>
 
-<!-- INSPECTION MODAL — only fires on GitHub direct, Webflow uses baileyPopup -->
+<!-- INSPECTION MODAL -->
 <div id="inspection-modal" class="modal-overlay" onclick="closeFormIfOutside(event)">
   <div class="modal-box">
     <button class="modal-close" onclick="closeInspectionForm()">&#10005;</button>
@@ -269,6 +268,12 @@
   </div>
 </div>
 
+<script>
+  // Hide header only when inside Webflow iframe
+  if (window.self !== window.top) {
+    document.getElementById('gh-header').style.display = 'none';
+  }
+</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="app.js"></script>
 </body>
