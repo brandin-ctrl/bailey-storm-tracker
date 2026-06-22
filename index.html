@@ -12,34 +12,29 @@
 </head>
 <body>
 
-
 <div id="gh-header">
-
   <div class="gh-nav">
     <div class="gh-nav-inner">
       <a href="https://baileyroofingrestoration.com" target="_blank">
         <img src="https://cdn.prod.website-files.com/695c0abe8b8c2841c4ebcd56/696e4e9e0dbdf2cd591fd599_logo_nav.png" alt="Bailey Roofing and Restoration" class="gh-logo">
       </a>
       <div class="gh-nav-right">
+        <div class="window-badge">
+          <span class="pulse-dot"></span>
+          <span id="window-label">Loading&hellip;</span>
+        </div>
         <a href="tel:+17703818081" class="header-phone">(770) 381-8081</a>
         <a href="https://baileyroofingrestoration.com" target="_blank" class="gh-site-btn">Visit Our Website &rarr;</a>
       </div>
     </div>
   </div>
-
   <div class="gh-hero">
-    <p class="gh-eyebrow">North Georgia Storm Intelligence &mdash; NOAA Verified</p>
+    <p class="gh-eyebrow">North Georgia Storm Intelligence &mdash; NOAA Verified Data</p>
     <h1 class="gh-title">Did a Storm Hit<br><span>Your Roof?</span></h1>
     <p class="gh-sub">Search your address to see every qualifying hail and wind event within 1 mile of your home — and whether your roof may be covered by insurance.</p>
-    <div class="gh-window-badge">
-      <span class="pulse-dot"></span>
-      <span id="window-label">Loading coverage window&hellip;</span>
-    </div>
   </div>
-
 </div>
 
-<!-- SEARCH BAR -->
 <div class="search-bar-wrap">
   <div class="page-wrap">
     <div class="search-row">
@@ -50,7 +45,6 @@
   </div>
 </div>
 
-<!-- MAP + PANEL -->
 <div class="tracker-layout">
 
   <div class="map-col">
@@ -62,6 +56,7 @@
       </div>
       <div class="filter-group">
         <button class="filter-btn" data-filter="golf">Golf Ball+</button>
+        <button class="filter-btn" data-filter="y2024">2024</button>
         <button class="filter-btn" data-filter="y2025">2025</button>
         <button class="filter-btn" data-filter="y2026">2026</button>
       </div>
@@ -83,11 +78,12 @@
     <div class="panel-state" id="panel-default">
       <div class="panel-icon">&#127777;</div>
       <h3>Explore Storm Events</h3>
-      <p>Tap any pin on the map to see storm details, affected neighborhoods, and canvassing opportunities.</p>
-      <p>Or search your address above to check insurance eligibility.</p>
+      <p>Tap any pin on the map to see storm details and insurance eligibility information.</p>
+      <p>Or search your address above to see what hit near your home.</p>
       <div class="quick-stats" id="quick-stats"></div>
     </div>
 
+    <!-- HAIL PANEL -->
     <div class="panel-state hidden" id="panel-hail">
       <div class="panel-back" onclick="showDefaultPanel()">&#8592; Back to map</div>
       <div class="event-header">
@@ -101,30 +97,48 @@
         <div class="estat-box"><span class="estat-num" id="hail-homes"></span><span class="estat-label">Est. Homes</span></div>
       </div>
       <div class="panel-tabs">
-        <button class="ptab active" onclick="switchTab('canvass', this)">Canvass Intel</button>
-        <button class="ptab" onclick="switchTab('insurance', this)">Insurance Info</button>
+        <button class="ptab active" onclick="switchTab('homeowner', this)">&#127968; Homeowner</button>
+        <button class="ptab" onclick="switchTab('rep', this)">&#128203; Rep Intel</button>
       </div>
-      <div class="ptab-content" id="tab-canvass">
+
+      <div class="ptab-content" id="tab-homeowner">
         <div class="canvass-block">
-          <div class="canvass-label">Recommended Action</div>
+          <div class="canvass-label">Insurance Eligibility</div>
+          <div class="ins-verdict" id="ins-verdict"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">What This Means for Your Roof</div>
+          <div class="canvass-action" id="homeowner-meaning"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">Signs to Check Around Your Home</div>
+          <div class="canvass-lookfor" id="homeowner-signs"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">How the Claim Process Works</div>
+          <div class="ins-detail" id="homeowner-process"></div>
+        </div>
+      </div>
+
+      <div class="ptab-content hidden" id="tab-rep">
+        <div class="canvass-block">
+          <div class="canvass-label">Canvass Priority</div>
           <div class="canvass-action" id="canvass-action"></div>
         </div>
         <div class="canvass-block">
-          <div class="canvass-label">Door Knock Script Opener</div>
-          <div class="canvass-script" id="canvass-script"></div>
-        </div>
-        <div class="canvass-block">
-          <div class="canvass-label">What to Look For</div>
+          <div class="canvass-label">What to Look For on Arrival</div>
           <div class="canvass-lookfor" id="canvass-lookfor"></div>
         </div>
+        <div class="canvass-block">
+          <div class="canvass-label">Objection Handling</div>
+          <div class="canvass-lookfor" id="canvass-objection"></div>
+        </div>
       </div>
-      <div class="ptab-content hidden" id="tab-insurance">
-        <div class="ins-verdict" id="ins-verdict"></div>
-        <div class="ins-detail" id="ins-detail"></div>
-      </div>
-      <button class="panel-cta-btn" onclick="openInspectionForm()">Book Inspection for This Area &rarr;</button>
+
+      <button class="panel-cta-btn" onclick="openInspectionForm()">Book Free Inspection for This Area &rarr;</button>
     </div>
 
+    <!-- WIND PANEL -->
     <div class="panel-state hidden" id="panel-wind">
       <div class="panel-back" onclick="showDefaultPanel()">&#8592; Back to map</div>
       <div class="event-header">
@@ -137,10 +151,49 @@
         <div class="estat-box"><span class="estat-num" id="wind-date"></span><span class="estat-label">Date</span></div>
         <div class="estat-box"><span class="estat-num" id="wind-homes"></span><span class="estat-label">Est. Homes</span></div>
       </div>
-      <div class="wind-info-block" id="wind-info"></div>
-      <button class="panel-cta-btn" onclick="openInspectionForm()">Book Inspection for This Area &rarr;</button>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTabWind('wind-homeowner', this)">&#127968; Homeowner</button>
+        <button class="ptab" onclick="switchTabWind('wind-rep', this)">&#128203; Rep Intel</button>
+      </div>
+
+      <div class="ptab-content" id="tab-wind-homeowner">
+        <div class="canvass-block">
+          <div class="canvass-label">Insurance Eligibility</div>
+          <div class="wind-verdict" id="wind-verdict"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">What This Means for Your Roof</div>
+          <div class="canvass-action" id="wind-homeowner-meaning"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">Signs to Check Around Your Home</div>
+          <div class="canvass-lookfor" id="wind-homeowner-signs"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">Your Next Step</div>
+          <div class="ins-detail" id="wind-homeowner-next"></div>
+        </div>
+      </div>
+
+      <div class="ptab-content hidden" id="tab-wind-rep">
+        <div class="canvass-block">
+          <div class="canvass-label">Canvass Priority</div>
+          <div class="canvass-action" id="wind-canvass-action"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">What to Look For</div>
+          <div class="canvass-lookfor" id="wind-canvass-lookfor"></div>
+        </div>
+        <div class="canvass-block">
+          <div class="canvass-label">Objection Handling</div>
+          <div class="canvass-lookfor" id="wind-canvass-objection"></div>
+        </div>
+      </div>
+
+      <button class="panel-cta-btn" onclick="openInspectionForm()">Book Free Inspection for This Area &rarr;</button>
     </div>
 
+    <!-- ADDRESS RESULT -->
     <div class="panel-state hidden" id="panel-address">
       <div class="panel-back" onclick="showDefaultPanel()">&#8592; Back to map</div>
       <div class="addr-verdict-wrap">
@@ -160,55 +213,23 @@
   </div>
 </div>
 
-<!-- INFO + FAQ + DISCLAIMER -->
 <div class="below-map">
   <div class="page-wrap">
     <div class="info-grid">
-      <div class="info-card">
-        <div class="info-icon">&#128737;</div>
-        <h4>Official NOAA Data</h4>
-        <p>Every storm report comes from the National Oceanic and Atmospheric Administration — the same source insurance adjusters reference.</p>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">&#128336;</div>
-        <h4>Rolling 2-Year Window</h4>
-        <p>Georgia homeowners insurance policies typically allow storm damage claims within 2 years of the event. This tracker enforces that window automatically, updated daily.</p>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">&#127968;</div>
-        <h4>1-Mile Address Check</h4>
-        <p>When you search your address, we check every qualifying hail event within 1 mile and every wind event whose area circle covers your location.</p>
-      </div>
-      <div class="info-card">
-        <div class="info-icon">&#128203;</div>
-        <h4>Free Inspection &amp; Claim Help</h4>
-        <p>If your home qualifies, Bailey Roofing documents the damage and works directly with your adjuster. You pay only your deductible.</p>
-      </div>
+      <div class="info-card"><div class="info-icon">&#128737;</div><h4>Official NOAA Data</h4><p>Every storm report comes from the National Oceanic and Atmospheric Administration — the same source insurance adjusters reference.</p></div>
+      <div class="info-card"><div class="info-icon">&#128336;</div><h4>Rolling 2-Year Window</h4><p>Georgia homeowners insurance policies typically allow storm damage claims within 2 years of the event. This tracker enforces that window automatically, updated daily.</p></div>
+      <div class="info-card"><div class="info-icon">&#127968;</div><h4>1-Mile Address Check</h4><p>When you search your address, we check every qualifying hail event within 1 mile and every wind event whose area circle covers your location.</p></div>
+      <div class="info-card"><div class="info-icon">&#128203;</div><h4>Free Inspection &amp; Claim Help</h4><p>If your home qualifies, Bailey Roofing documents the damage and works directly with your adjuster. You pay only your deductible.</p></div>
     </div>
 
     <div class="faq-section">
       <h2 class="section-title">Common Questions</h2>
       <div class="faq-list">
-        <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">What hail size damages a roof? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">We track hail from 0.75" (dime size) and above. Hail at 1.00" (quarter size) can crack shingle granules and shorten your roof's lifespan. Golf ball hail (1.75") almost always causes insurance-claimable damage.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">What wind speed damages 3-tab shingles? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">3-tab shingles typically carry a 60&ndash;70 mph manufacturer rating, but many insurers apply a 45 mph threshold for older or weathered shingles. This tracker flags all wind events at 45 mph or higher and checks whether your address falls inside the affected area radius.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">How does the 2-year insurance window work? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">Most Georgia homeowners insurance policies allow storm damage claims within 2 years of the loss event. This tracker uses a rolling window that updates every day — always showing the 24 most recent months. Events older than 2 years are shown grayed out as informational history only.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">Does insurance cover hail and wind roof damage? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">In most cases, yes. Standard homeowners insurance covers hail and wind damage as an Act of God. If a qualifying storm hit within 1 mile of your home during the 2-year window, your policy may cover a full roof replacement. Bailey Roofing works directly with your insurance company on your behalf.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" onclick="toggleFaq(this)">Is the inspection really free? <span class="chev">&#8964;</span></button>
-          <div class="faq-a">Yes. Bailey Roofing &amp; Restoration offers free, no-obligation roof inspections. Our licensed inspectors document storm damage professionally and walk you through the insurance process at no cost. We are compensated by your insurance company when a claim is approved — you pay only your deductible.</div>
-        </div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What hail size damages a roof? <span class="chev">&#8964;</span></button><div class="faq-a">We track hail from 0.75" (dime size) and above. Hail at 1.00" (quarter size) can crack shingle granules and shorten your roof's lifespan. Golf ball hail (1.75") almost always causes insurance-claimable damage.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What wind speed damages 3-tab shingles? <span class="chev">&#8964;</span></button><div class="faq-a">3-tab shingles are rated to about 60&ndash;70 mph, but many insurers apply a 45 mph threshold for older or weathered shingles. This tracker flags all wind events at 45 mph or higher and checks whether your address falls inside the affected area.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How does the 2-year insurance window work? <span class="chev">&#8964;</span></button><div class="faq-a">Most Georgia homeowners insurance policies allow storm damage claims within 2 years of the loss event. This tracker uses a rolling window that updates every day. Events older than 2 years are shown grayed out as informational history only.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does insurance cover hail and wind roof damage? <span class="chev">&#8964;</span></button><div class="faq-a">In most cases, yes. Standard homeowners insurance covers hail and wind damage as an Act of God. If a qualifying storm hit within 1 mile of your home during the 2-year window, your policy may cover a full roof replacement. Bailey Roofing works directly with your insurance company on your behalf.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is the inspection really free? <span class="chev">&#8964;</span></button><div class="faq-a">Yes. Bailey Roofing &amp; Restoration offers free, no-obligation roof inspections. Our licensed inspectors document storm damage professionally and walk you through the insurance process at no cost. We are compensated by your insurance company when a claim is approved — you pay only your deductible.</div></div>
       </div>
     </div>
 
@@ -218,7 +239,6 @@
   </div>
 </div>
 
-<!-- BOTTOM CTA -->
 <section class="bottom-cta">
   <div class="page-wrap" style="text-align:center">
     <h2>Your Roof May Already <span class="gold">Be Covered</span></h2>
@@ -230,7 +250,6 @@
   </div>
 </section>
 
-<!-- INSPECTION MODAL -->
 <div id="inspection-modal" class="modal-overlay" onclick="closeFormIfOutside(event)">
   <div class="modal-box">
     <button class="modal-close" onclick="closeInspectionForm()">&#10005;</button>
@@ -238,22 +257,10 @@
     <h2 class="modal-title">Book Your Free Inspection</h2>
     <p class="modal-sub">No cost. No obligation. We'll contact you within 1 business day.</p>
     <form id="inspection-form" action="https://formspree.io/f/mojzzlzd" method="POST">
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input type="text" name="name" class="form-input" placeholder="John Smith" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Phone Number</label>
-        <input type="tel" name="phone" class="form-input" placeholder="(770) 555-0100" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Property Address</label>
-        <input type="text" name="address" id="form-address" class="form-input" placeholder="123 Oak St, Suwanee GA 30024" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email (optional)</label>
-        <input type="email" name="email" class="form-input" placeholder="you@email.com">
-      </div>
+      <div class="form-group"><label class="form-label">Full Name</label><input type="text" name="name" class="form-input" placeholder="John Smith" required></div>
+      <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" name="phone" class="form-input" placeholder="(770) 555-0100" required></div>
+      <div class="form-group"><label class="form-label">Property Address</label><input type="text" name="address" id="form-address" class="form-input" placeholder="123 Oak St, Suwanee GA 30024" required></div>
+      <div class="form-group"><label class="form-label">Email (optional)</label><input type="email" name="email" class="form-input" placeholder="you@email.com"></div>
       <input type="hidden" name="source" value="Storm Tracker">
       <input type="hidden" name="storm_context" id="form-storm-context" value="">
       <button type="submit" class="form-submit">Request My Free Inspection &rarr;</button>
@@ -269,7 +276,6 @@
 </div>
 
 <script>
-  // Hide header only when inside Webflow iframe
   if (window.self !== window.top) {
     document.getElementById('gh-header').style.display = 'none';
   }
